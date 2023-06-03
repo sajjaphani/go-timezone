@@ -1,6 +1,8 @@
 package timezone
 
 import (
+	"fmt"
+	"runtime"
 	"time"
 )
 
@@ -8,6 +10,7 @@ type Timezone struct {
 	UtcOffset    string `json:"utc_offset"`
 	Abbreviation string `json:"abbr"`
 	IsDst        bool   `json:"is_dst"`
+	IanaName     string `json:"iana_name"`
 }
 
 func GetTimezone() *Timezone {
@@ -18,6 +21,21 @@ func GetTimezone() *Timezone {
 	zone, _ := t.Zone()
 	tz.Abbreviation = zone
 	tz.IsDst = t.IsDST()
+
+	target := runtime.GOOS
+	switch target {
+	case "linux", "darwin":
+		name, err := GetNameFromLocaltime()
+		if err != nil {
+			fmt.Println("Error reading IAJA")
+			tz.IanaName = "Unknown/Unknown"
+		} else {
+			tz.IanaName = name
+		}
+	default:
+		fmt.Printf("Unsuported Platform '%v'\n", target)
+		tz.IanaName = "Unknown/Unknown"
+	}
 
 	return tz
 }
