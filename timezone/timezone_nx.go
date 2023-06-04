@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func GetNameFromLocaltime() (string, error) {
+func GetIanaNameForLinux() (string, error) {
 	linkPath := "/etc/localtime"
 	targetPath, err := os.Readlink(linkPath)
 	if err != nil {

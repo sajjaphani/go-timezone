@@ -25,9 +25,17 @@ func GetTimezone() *Timezone {
 	target := runtime.GOOS
 	switch target {
 	case "linux", "darwin":
-		name, err := GetNameFromLocaltime()
+		name, err := GetIanaNameForLinux()
 		if err != nil {
-			fmt.Println("Error reading IAJA")
+			fmt.Println("Error reading IANA name from localtime", err)
+			tz.IanaName = "Unknown/Unknown"
+		} else {
+			tz.IanaName = name
+		}
+	case "windows":
+		name, err := GetIanaNameForWindows()
+		if err != nil {
+			fmt.Println("Error reading IANA name for Windows", err)
 			tz.IanaName = "Unknown/Unknown"
 		} else {
 			tz.IanaName = name
