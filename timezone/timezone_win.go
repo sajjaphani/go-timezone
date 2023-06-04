@@ -16,7 +16,7 @@ type WindowsZoneMapping struct {
 	IANATimezone    string
 }
 
-func GetIanaNameForWindowName(windowsName string) (string, error) {
+func GetIanaNameForWindowsName(windowsName string) (string, error) {
 	file, err := Resources.Open("resources/windows2iana.json")
 	if err != nil {
 		return "", err
@@ -26,6 +26,9 @@ func GetIanaNameForWindowName(windowsName string) (string, error) {
 	decoder := json.NewDecoder(r)
 	var m map[string]string
 	err = decoder.Decode(&m)
+	if err != nil {
+		return "", err
+	}
 
 	return m[windowsName], err
 }
@@ -40,7 +43,7 @@ func GetIanaNameForWindows() (string, error) {
 
 	timezone := parseTimezone(string(output))
 
-	return GetIanaNameForWindowName(timezone)
+	return GetIanaNameForWindowsName(timezone)
 }
 
 func parseTimezone(output string) string {
