@@ -1,7 +1,6 @@
 package timezone
 
 import (
-	"fmt"
 	"runtime"
 	"time"
 )
@@ -27,7 +26,6 @@ func GetTimezone() *Timezone {
 	case "linux", "darwin":
 		name, err := GetIanaNameForLinux()
 		if err != nil {
-			fmt.Println("Error reading IANA name from localtime", err)
 			tz.IanaName = "Unknown/Unknown"
 		} else {
 			tz.IanaName = name
@@ -35,13 +33,11 @@ func GetTimezone() *Timezone {
 	case "windows":
 		name, err := GetIanaNameForWindows()
 		if err != nil {
-			fmt.Println("Error reading IANA name for Windows", err)
 			tz.IanaName = "Unknown/Unknown"
 		} else {
 			tz.IanaName = name
 		}
 	default:
-		fmt.Printf("Unsuported Platform '%v'\n", target)
 		tz.IanaName = "Unknown/Unknown"
 	}
 
